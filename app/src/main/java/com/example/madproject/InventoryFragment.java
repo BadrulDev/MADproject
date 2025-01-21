@@ -1,5 +1,6 @@
 package com.example.madproject;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -51,10 +52,10 @@ public class InventoryFragment extends Fragment {
         Cursor cursor = databaseHelper.getAllItems();
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(cursor.getColumnIndex("id"));
-                String name = cursor.getString(cursor.getColumnIndex("name"));
-                String category = cursor.getString(cursor.getColumnIndex("category"));
-                int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
+                @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
                 inventoryList.add(new InventoryItem(id, name, category, quantity));
             } while (cursor.moveToNext());
             cursor.close();
