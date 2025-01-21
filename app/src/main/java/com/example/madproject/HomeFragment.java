@@ -37,6 +37,16 @@ public class HomeFragment extends Fragment {
                     .commit();
         });
 
+        View modifyItemButton = view.findViewById(R.id.modifyItemButton);
+
+        // Set an OnClickListener to navigate to CategoryItemsFragment
+        modifyItemButton.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new ModifyItemFragment())
+                    .addToBackStack(null) // Optional: Add to back stack for navigating back
+                    .commit();
+        });
+
         return view;
     }
 }
