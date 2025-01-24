@@ -7,6 +7,11 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.google.android.gms.auth.api.signin.*;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private ArrayList<String> registeredUsernames;
+
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +39,16 @@ public class MainActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.loginButton);
         Button registerButton = findViewById(R.id.registerButton);
 
+        SignInButton googleLoginButton = findViewById(R.id.loginGoogle);
+
         // Load registered usernames
         registeredUsernames = loadRegisteredUsernames();
+
+        // Configure Google Sign-In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Login button click
         loginButton.setOnClickListener(v -> {
@@ -64,12 +80,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         // Register button click (Navigate to RegisterActivity)
         registerButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
+
+        googleLoginButton.setOnClickListener(v -> signOutAndSignInWithGoogle());
     }
+
+    private void signOutAndSignInWithGoogle() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            // Once sign out is complete, initiate sign in
+            signInWithGoogle();
+        });
+    }
+
+    private void signInWithGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            String email = account.getEmail();
+            String username = account.getDisplayName();
+
+            // Save logged-in email to SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("logged_in_email", email);
+            editor.putString("logged_in_username", username);
+            editor.apply();
+
+            Toast.makeText(this, "Login As: " + email, Toast.LENGTH_SHORT).show();
+
+            // Navigate to HomePageActivity
+            Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+            startActivity(intent);
+            finish();
+        } catch (ApiException e) {
+            Toast.makeText(this, "Google Sign-In signInResult:failed code=" + e.getStatusCode(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private ArrayList<String> loadRegisteredUsernames() {
         ArrayList<String> usernames = new ArrayList<>();
