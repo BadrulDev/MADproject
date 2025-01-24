@@ -1,5 +1,6 @@
 package com.example.madproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,12 +38,23 @@ public class HomeFragment extends Fragment {
                     .commit();
         });
 
+        // Find the modifyItemButton
         View modifyItemButton = view.findViewById(R.id.modifyItemButton);
 
-        // Set an OnClickListener to navigate to CategoryItemsFragment
+        // Set an OnClickListener to navigate to ModifyItemFragment
         modifyItemButton.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new ModifyItemFragment())
+                    .addToBackStack(null) // Optional: Add to back stack for navigating back
+                    .commit();
+        });
+
+        View reportButton = view.findViewById(R.id.reportButton);
+
+        // Set an OnClickListener to navigate to ModifyItemFragment
+        reportButton.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new GenerateReportFragment())
                     .addToBackStack(null) // Optional: Add to back stack for navigating back
                     .commit();
         });

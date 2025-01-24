@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "madProject"
+rootProject.name = "PITSTOP PRO"
 include(":app")
  
