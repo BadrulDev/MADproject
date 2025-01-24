@@ -14,104 +14,91 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
-public class InventoryFragment extends Fragment {
+public class ModifyItemFragment extends Fragment {
 
-    private ArrayList<InventoryItem> inventoryList;
+    private ArrayList<InventoryItem> itemList;
     private InventoryAdapter adapter;
     private DatabaseHelper databaseHelper;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_inventory, container, false);
+        View view = inflater.inflate(R.layout.fragment_modify_items, container, false);
 
         // Initialize DatabaseHelper
         databaseHelper = new DatabaseHelper(requireContext());
 
-        // Initialize inventory list and load data from database
-        inventoryList = new ArrayList<>();
-        loadInventoryFromDatabase();
+        // Initialize item list and load data from database
+        itemList = new ArrayList<>();
+        loadItemsByCategory("All"); // Default to all categories
 
         // Setup ListView
-        ListView inventoryListView = view.findViewById(R.id.inventory_list);
-        adapter = new InventoryAdapter(requireContext(), inventoryList);
-        inventoryListView.setAdapter(adapter);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) ListView itemListView = view.findViewById(R.id.item_list);
+        adapter = new InventoryAdapter(requireContext(), itemList);
+        itemListView.setAdapter(adapter);
 
-        // Add new item functionality
-        Button addItemButton = view.findViewById(R.id.add_item_button);
-        addItemButton.setOnClickListener(v -> showAddItemDialog());
+        // Setup Spinner for categories
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Spinner categorySpinner = view.findViewById(R.id.category_spinner);
+        String[] categories = {
+                "All", "Engine Component", "Transmission", "Electrical System", "Suspension and Steering",
+                "Braking System", "Cooling System", "Fuel System", "Body and Exterior",
+                "Interior Components", "Wheels and Tires", "Accessories", "Maintenance Supplies"
+        };
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categories);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(spinnerAdapter);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCategory = categories[position];
+                loadItemsByCategory(selectedCategory);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         // Edit and remove functionality
-        inventoryListView.setOnItemClickListener((parent, itemView, position, id) -> showEditRemoveDialog(position));
+        itemListView.setOnItemClickListener((parent, itemView, position, id) -> showEditRemoveDialog(position));
 
         return view;
     }
 
-    private void loadInventoryFromDatabase() {
-        inventoryList.clear();
-        Cursor cursor = databaseHelper.getAllItems();
+    private void loadItemsByCategory(String category) {
+        itemList.clear();
+        Cursor cursor;
+        if (category.equals("All")) {
+            cursor = databaseHelper.getAllItems();
+        } else {
+            cursor = databaseHelper.getItemsByCategory(category); // No error now
+        }
+
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
                 @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
-                @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("category"));
+                @SuppressLint("Range") String itemCategory = cursor.getString(cursor.getColumnIndex("category"));
                 @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
-                inventoryList.add(new InventoryItem(id, name, category, quantity));
+                itemList.add(new InventoryItem(id, name, itemCategory, quantity));
             } while (cursor.moveToNext());
             cursor.close();
         }
     }
 
-    private void showAddItemDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_edit_item, null);
-        builder.setView(dialogView);
-
-        EditText nameEditText = dialogView.findViewById(R.id.edit_item_name);
-        Spinner categorySpinner = dialogView.findViewById(R.id.spinner_item_category); // Use Spinner for category
-        EditText quantityEditText = dialogView.findViewById(R.id.edit_item_quantity);
-
-        // Predefined categories
-        String[] categories = {
-                "Engine Component", "Transmission", "Electrical System", "Suspension and Steering",
-                "Braking System", "Cooling System", "Fuel System", "Body and Exterior",
-                "Interior Components", "Wheels and Tires", "Accessories", "Maintenance Supplies"
-        };
-
-        // Set up Spinner with categories
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categories);
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categorySpinner.setAdapter(categoryAdapter);
-
-        builder.setTitle("Add New Item")
-                .setPositiveButton("Add", (dialog, which) -> {
-                    String name = nameEditText.getText().toString();
-                    String category = categorySpinner.getSelectedItem().toString(); // Get selected category
-                    int quantity = Integer.parseInt(quantityEditText.getText().toString());
-
-                    if (databaseHelper.insertItem(name, category, quantity)) {
-                        loadInventoryFromDatabase();
-                        adapter.notifyDataSetChanged();
-                        Toast.makeText(getContext(), "Item Added", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "Error Adding Item", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
 
     private void showEditRemoveDialog(int position) {
-        InventoryItem item = inventoryList.get(position);
+        InventoryItem item = itemList.get(position);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_edit_item, null);
         builder.setView(dialogView);
 
         EditText nameEditText = dialogView.findViewById(R.id.edit_item_name);
-        Spinner categorySpinner = dialogView.findViewById(R.id.spinner_item_category); // Use Spinner for category
+        Spinner categorySpinner = dialogView.findViewById(R.id.spinner_item_category);
         EditText quantityEditText = dialogView.findViewById(R.id.edit_item_quantity);
 
         // Predefined categories
@@ -121,7 +108,6 @@ public class InventoryFragment extends Fragment {
                 "Interior Components", "Wheels and Tires", "Accessories", "Maintenance Supplies"
         };
 
-        // Set up Spinner with categories
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categories);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
@@ -130,7 +116,6 @@ public class InventoryFragment extends Fragment {
         nameEditText.setText(item.getName());
         quantityEditText.setText(String.valueOf(item.getQuantity()));
 
-        // Set the correct category in the Spinner
         int categoryPosition = categoryAdapter.getPosition(item.getCategory());
         categorySpinner.setSelection(categoryPosition);
 
@@ -141,7 +126,7 @@ public class InventoryFragment extends Fragment {
                     int newQuantity = Integer.parseInt(quantityEditText.getText().toString());
 
                     if (databaseHelper.updateItem(item.getId(), newName, newCategory, newQuantity)) {
-                        loadInventoryFromDatabase();
+                        loadItemsByCategory(newCategory);
                         adapter.notifyDataSetChanged();
                         Toast.makeText(getContext(), "Item Updated", Toast.LENGTH_SHORT).show();
                     } else {
@@ -150,7 +135,7 @@ public class InventoryFragment extends Fragment {
                 })
                 .setNeutralButton("Remove", (dialog, which) -> {
                     if (databaseHelper.deleteItem(item.getId())) {
-                        loadInventoryFromDatabase();
+                        loadItemsByCategory("All");
                         adapter.notifyDataSetChanged();
                         Toast.makeText(getContext(), "Item Removed", Toast.LENGTH_SHORT).show();
                     } else {
@@ -161,5 +146,4 @@ public class InventoryFragment extends Fragment {
                 .create()
                 .show();
     }
-
 }

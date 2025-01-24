@@ -33,8 +33,6 @@ public class HomePageActivity extends AppCompatActivity {
 
                 if (item.getItemId() == R.id.navigationHome) {
                     selectedFragment = new HomeFragment();
-                } else if (item.getItemId() == R.id.navigationInventory) {
-                    selectedFragment = new InventoryFragment();
                 } else if (item.getItemId() == R.id.navigationProfile) {
                     selectedFragment = new ProfileFragment();
                 } else {

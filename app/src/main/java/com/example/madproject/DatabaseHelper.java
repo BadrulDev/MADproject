@@ -68,6 +68,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
     }
 
+
+    public Cursor getItemsByCategory(String category) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_CATEGORY + " = ?", new String[]{category});
+    }
+
+
     public boolean updateItem(int id, String name, String category, int quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
