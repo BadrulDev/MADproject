@@ -1,5 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,29 +10,49 @@
         android:id="@+id/profile_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="user@example.com"
-        android:textSize="18sp"
-        android:layout_marginBottom="16dp" />
+        android:layout_gravity="center"
+        android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/change_email_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Change Email" />
 
-    <Button
-        android:id="@+id/change_password_button"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Change Password"
-        android:layout_marginTop="16dp" />
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/change_email_button"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#2196F3"
+            android:text="Change Email"
+            android:layout_marginTop="16dp" />
+
+        <View
+            android:layout_width="35dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/change_password_button"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#2196F3"
+            android:text="Change Password"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/logout_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout"
         android:layout_marginTop="16dp"
-        android:background="@color/design_default_color_error"
-        android:textColor="@android:color/white" />
+        android:backgroundTint="#FF2800"
+        android:text="Logout"
+        android:textColor="@android:color/white"
+        tools:layout_marginTop="40dp" />
 </LinearLayout>

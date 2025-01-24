@@ -27,11 +27,13 @@
     <!-- Username EditText -->
     <EditText
         android:id="@+id/usernameEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="282dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/edittextstyle"
         android:hint="Username"
         android:inputType="text"
-        android:layout_marginTop="20dp"
+        android:paddingStart="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPitStop" />
@@ -39,11 +41,13 @@
     <!-- Password EditText -->
     <EditText
         android:id="@+id/passwordEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword"
+        android:layout_width="289dp"
+        android:layout_height="46dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/edittextstyle"
+        android:hint="Password"
+        android:paddingStart="16dp"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/usernameEditText" />
@@ -51,10 +55,11 @@
     <!-- Login Button -->
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Login"
+        android:layout_width="207dp"
+        android:layout_height="48dp"
         android:layout_marginTop="30dp"
+        android:backgroundTint="#2196F3"
+        android:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
@@ -62,10 +67,11 @@
     <!-- Register Button -->
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Register"
+        android:layout_width="205dp"
+        android:layout_height="45dp"
         android:layout_marginTop="20dp"
+        android:backgroundTint="#2196F3"
+        android:text="Register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginButton" />

@@ -23,10 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/colorSelector"
-        app:itemTextColor="@color/colorSelector"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:itemIconTint="#2196F3"
+        app:itemTextColor="#2196F3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 
 

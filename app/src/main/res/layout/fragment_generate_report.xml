@@ -29,19 +29,32 @@
         android:contentDescription="Top Image"
         android:src="@drawable/report" />
 
-    <Button
-        android:id="@+id/generate_report_button"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Generate Report" />
+        android:layout_height="80dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/generate_pdf_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Generate PDF" />
+        <Button
+            android:id="@+id/generate_report_button"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#2196F3"
+            android:text="Generate Report" />
+
+        <View
+            android:layout_width="35dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/generate_pdf_button"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#2196F3"
+            android:text="Generate PDF" />
+
+    </LinearLayout>
 
 
     <!-- TextView to display the report -->

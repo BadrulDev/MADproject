@@ -29,34 +29,48 @@
 
     <EditText
         android:id="@+id/edit_item_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="371dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/edittextstyle"
         android:hint="Item Name"
-        android:inputType="text"
-        android:layout_marginBottom="12dp"/>
+        android:paddingStart="16dp"
+        android:inputType="text" />
 
-    <!-- Category Spinner -->
-    <Spinner
-        android:id="@+id/spinner_item_category"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="12dp"/>
+        android:layout_height="143dp"
+        android:orientation="horizontal">
 
-    <!-- Quantity -->
-    <EditText
-        android:id="@+id/edit_item_quantity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Quantity"
-        android:inputType="number"
-        android:layout_marginTop="12dp" />
+        <Spinner
+            android:id="@+id/spinner_item_category"
+            android:layout_width="184dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp" />
 
-    <!-- Add Button -->
+<!--        <View-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="match_parent" />-->
+
+        <EditText
+            android:id="@+id/edit_item_quantity"
+            android:layout_width="161dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edittextstyle"
+            android:hint="Quantity"
+            android:paddingStart="16dp"
+            android:inputType="number" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/button_add_item"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
+        android:backgroundTint="#2196F3"
         android:text="Add Item" />
 </LinearLayout>

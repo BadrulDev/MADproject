@@ -33,14 +33,17 @@
     <Spinner
         android:id="@+id/category_spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dropdown"
-        android:layout_marginBottom="11dp"/>
+        android:layout_height="42dp"
+        android:layout_marginBottom="11dp"
+        android:background="@drawable/edittextstyle"
+        android:spinnerMode="dropdown" />
 
     <ListView
         android:id="@+id/item_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@android:color/darker_gray"
+        android:layout_gravity="center"
+        android:background="@drawable/edittextstyle"
         android:dividerHeight="1dp" />
 </LinearLayout>
