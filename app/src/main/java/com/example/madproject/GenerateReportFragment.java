@@ -85,31 +85,25 @@ public class GenerateReportFragment extends Fragment {
             return;
         }
 
-        // Create a PDF document
         PdfDocument pdfDocument = new PdfDocument();
         Paint paint = new Paint();
-
-        // Set page size
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4 size in points
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
-        // Get canvas
         Canvas canvas = page.getCanvas();
         canvas.drawText("Inventory Report", 50, 50, paint);
 
-        // Write content to PDF
         String[] reportLines = reportTextView.getText().toString().split("\n");
-        int y = 100; // Initial Y-coordinate for text
+        int y = 100;
 
         for (String line : reportLines) {
             canvas.drawText(line, 50, y, paint);
-            y += 20; // Line spacing
+            y += 20;
         }
 
         pdfDocument.finishPage(page);
 
-        // Save the PDF
-        File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Reports");
+        // Use app-specific directory
+        File directory = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "Reports");
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -121,8 +115,9 @@ public class GenerateReportFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(requireContext(), "Failed to save PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        } finally {
+            pdfDocument.close();
         }
-
-        pdfDocument.close();
     }
+
 }
